@@ -28,11 +28,13 @@ final class SearchViewController: BaseViewController {
 	override func configureView() {
 		self.navigationItem.title = "검색"
 		self.navigationController?.navigationBar.prefersLargeTitles = true
+		searchView.searchTableView.rowHeight = UITableView.automaticDimension
 	}
 
 	override func configureBinding() {
 		let input = SearchViewModel.Input(
-			inputSearchText: searchView.searchController.searchBar.rx.text
+			inputSearchText: searchView.searchController.searchBar.rx.text, 
+			inputDidSelect: searchView.searchTableView.rx.modelSelected(ItunesResult.self)
 		)
 
 		let output = viewModel.transform(input: input)
@@ -45,6 +47,13 @@ final class SearchViewController: BaseViewController {
 				cell.appIconImageView.kf.setImage(with: URL(string: element.artworkUrl60)!)
 				cell.appNameLabel.text = element.trackName
 				cell.configureStackView(element.screenshotUrls)
+			}.disposed(by: disposeBag)
+
+		output.outputDidSelect
+			.drive(with: self) { owner, value in
+				let vc = DetailViewController()
+				owner.navigationController?.pushViewController(vc, animated: true)
+				owner.searchView.searchController.isActive = false
 			}.disposed(by: disposeBag)
 
 	}

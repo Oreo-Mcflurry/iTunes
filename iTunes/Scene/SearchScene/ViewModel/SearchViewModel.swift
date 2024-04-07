@@ -12,10 +12,12 @@ import RxCocoa
 final class SearchViewModel: InputOutputViewModelProtocol {
 	struct Input {
 		let inputSearchText: ControlProperty<String?>
+		let inputDidSelect: ControlEvent<ItunesResult>
 	}
 
 	struct Output {
 		let outputSearchResult: PublishSubject<[ItunesResult]>
+		let outputDidSelect: Driver<ItunesResult>
 	}
 
 	var disposeBag = DisposeBag()
@@ -32,6 +34,7 @@ final class SearchViewModel: InputOutputViewModelProtocol {
 				searchResult.onNext(value.results)
 			}.disposed(by: disposeBag)
 
-		return Output(outputSearchResult: searchResult)
+		return Output(outputSearchResult: searchResult,
+						  outputDidSelect: input.inputDidSelect.asDriver())
 	}
 }

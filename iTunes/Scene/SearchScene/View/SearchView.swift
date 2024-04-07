@@ -28,6 +28,5 @@ final class SearchView: BaseUIView {
 	override func configureView() {
 		searchController.searchBar.placeholder = "앱을 검색하세요."
 		searchTableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.identifier)
-		searchTableView.rowHeight = UITableView.automaticDimension
 	}
 }
