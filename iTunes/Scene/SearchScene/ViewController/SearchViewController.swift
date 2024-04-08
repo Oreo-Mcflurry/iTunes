@@ -21,13 +21,17 @@ final class SearchViewController: BaseViewController {
 		self.view = searchView
 	}
 
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		navigationController?.navigationBar.prefersLargeTitles = true
+	}
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 	}
 
 	override func configureView() {
 		self.navigationItem.title = "검색"
-		self.navigationController?.navigationBar.prefersLargeTitles = true
 		searchView.searchTableView.rowHeight = UITableView.automaticDimension
 	}
 
@@ -52,6 +56,7 @@ final class SearchViewController: BaseViewController {
 		output.outputDidSelect
 			.drive(with: self) { owner, value in
 				let vc = DetailViewController()
+				vc.testData = value
 				owner.navigationController?.pushViewController(vc, animated: true)
 				owner.searchView.searchController.isActive = false
 			}.disposed(by: disposeBag)
